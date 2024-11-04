@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightOrange">
+
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/lightOrange">
+
+        <!-- Welcome Text -->
+        <TextView
+            android:id="@+id/tv_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to MyMoney!"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Notification Button (Bell Icon) -->
+        <ImageButton
+            android:id="@+id/btn_notification"
+            android:layout_width="16dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_notification_bell"
+            android:background="?attr/selectableItemBackground"
+            android:layout_marginStart="160dp"
+            android:contentDescription="Notifications"
+
+            />
+    </LinearLayout>
+
+    <!-- Balance Overview Section -->
+    <LinearLayout
+        android:id="@+id/balance_overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:background="@drawable/rounded_corner"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Income -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Income"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_total_income"
+                android:layout_width="94dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/orange"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:background="@color/black" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Expenses -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Expenses"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_total_expense"
+                android:layout_width="111dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/blue"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Add Transaction Button -->
+
+    <!-- Recent Transactions Section -->
+
+
+    <!-- Bottom Navigation Menu -->
+
+    <Button
+        android:id="@+id/btn_add_transaction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginBottom="423dp"
+        android:backgroundTint="@color/black"
+
+        android:text="Add Transaction"
+        android:textColor="@color/white" />
+
+    <Button
+        android:id="@+id/btn_google_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="229dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginBottom="423dp"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:backgroundTint="@color/black"
+        android:text="Google Maps"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/balance_overview"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="60dp"
+        android:text="Recent Transactions"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigation_menu" />
+</RelativeLayout>

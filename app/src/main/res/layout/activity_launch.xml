@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <!-- Hình ảnh logo ở giữa -->
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        android:contentDescription="App Logo"
+        android:layout_gravity="center" />
+
+    <!-- Câu slogan bên dưới logo -->
+    <TextView
+        android:id="@+id/slogan"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="Everyone silent, listen to my money talk! Spend how I like it, yeah, everyone know what I mean."
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <!-- Nút Get Started ở phía dưới -->
+    <Button
+        android:id="@+id/btn_get_started"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:backgroundTint="@color/black"
+        android:padding="10dp"
+        android:text="Get Started"
+        android:textColor="@color/white" />
+
+</LinearLayout>

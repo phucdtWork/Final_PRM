@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_food"
+        android:title="Food"
+        android:icon="@drawable/ic_food"/>
+    <item
+        android:id="@+id/menu_houseware"
+        android:title="Houseware"
+        android:icon="@drawable/ic_houseware"/>
+    <item
+        android:id="@+id/menu_clothes"
+        android:title="Clothes"
+        android:icon="@drawable/ic_clothes"/>
+    <item
+        android:id="@+id/menu_cosmetic"
+        android:title="Cosmetic"
+        android:icon="@drawable/ic_cosmetic"/>
+    <item
+        android:id="@+id/menu_exchange"
+        android:title="Exchange"
+        android:icon="@drawable/ic_exchange"/>
+    <item
+        android:id="@+id/menu_medical"
+        android:title="Medical"
+        android:icon="@drawable/ic_medical"/>
+    <item
+        android:id="@+id/menu_education"
+        android:title="Education"
+        android:icon="@drawable/ic_education"/>
+    <item
+        android:id="@+id/menu_electric_bill"
+        android:title="Electric Bill"
+        android:icon="@drawable/ic_electric_bill"/>
+    <item
+        android:id="@+id/menu_transportation"
+        android:title="Transportation"
+        android:icon="@drawable/ic_transportation"/>
+    <item
+        android:id="@+id/menu_housing_expenses"
+        android:title="Housing Expenses"
+        android:icon="@drawable/ic_housing_expenses"/>
+    <item
+        android:id="@+id/menu_contact_fee"
+        android:title="Contact Fee"
+        android:icon="@drawable/ic_contact_fee"/>
+    <item
+        android:id="@+id/menu_edit"
+        android:title="Edit"
+        android:icon="@drawable/ic_edit"/>
+</menu>

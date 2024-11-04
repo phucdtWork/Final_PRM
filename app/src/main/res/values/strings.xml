@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">MyMoney</string>
+    <string-array name="security_questions_array">
+        <item>Select a security question</item> <!-- Item mặc định -->
+        <item>What is your favorite pet?</item>
+        <item>What is your favorite color?</item>
+        <item>What city were you born in?</item>
+        <item>What is your favorite food?</item>
+        <item>What is your favorite season?</item>
+        <item>What is your favorite sport?</item>
+        <item>What is your favorite fruit?</item>
+        <item>What is your favorite movie?</item>
+    </string-array>
+
+    <string-array name="transaction_types">
+        <item>Select a transaction type</item> <!-- Item mặc định -->
+        <item>Income</item>
+        <item>Expense</item>
+    </string-array>
+
+</resources>

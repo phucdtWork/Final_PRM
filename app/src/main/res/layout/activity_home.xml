@@ -34,7 +34,7 @@
             android:layout_height="18dp"
             android:src="@drawable/ic_notification_bell"
             android:background="?attr/selectableItemBackground"
-            android:layout_marginStart="160dp"
+            android:layout_marginStart="145dp"
             android:contentDescription="Notifications"
 
             />
@@ -71,12 +71,12 @@
                 android:layout_width="94dp"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="@color/orange"
+                android:textColor="@color/blue"
                 android:textSize="24sp" />
         </LinearLayout>
 
         <View
-            android:layout_width="8dp"
+            android:layout_width="2dp"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="16dp"
             android:background="@color/black" />
@@ -112,37 +112,24 @@
 
     <!-- Bottom Navigation Menu -->
 
-    <Button
-        android:id="@+id/btn_add_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="170dp"
-        android:layout_marginBottom="423dp"
-        android:backgroundTint="@color/black"
 
-        android:text="Add Transaction"
-        android:textColor="@color/white" />
-
-    <Button
+    <ImageButton
         android:id="@+id/btn_google_map"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="229dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginLeft="350dp"
+        android:layout_marginTop="185dp"
         android:layout_marginBottom="423dp"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp"
-        android:backgroundTint="@color/black"
-        android:text="Google Maps"
-        android:textColor="@color/white" />
+        android:background="@color/lightOrange"
+        android:src="@drawable/baseline_location_pin_24"
+         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/balance_overview"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
         android:text="Recent Transactions"
         android:textColor="@color/black"
         android:textSize="18sp"

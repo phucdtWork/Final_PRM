@@ -15,8 +15,8 @@ public interface NotificationDAO {
     void insertNotification(NotificationEntity notification);
 
     // Get all notifications
-    @Query("SELECT * FROM notifications ORDER BY date DESC")
-    List<NotificationEntity> getAllNotifications();
+    @Query("SELECT * FROM notifications WHERE userId=:userId ORDER BY notificationId DESC")
+    List<NotificationEntity> getNotificationsByUserId(int userId);
 
     // Get notifications based on a specific date range
     @Query("SELECT * FROM notifications WHERE date BETWEEN :startDate AND :endDate")

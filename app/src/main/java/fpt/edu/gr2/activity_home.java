@@ -32,9 +32,13 @@ public class activity_home extends AppCompatActivity {
     private ActivityResultLauncher<Intent> addTransactionLauncher;
     private AppDatabase appDatabase; // Khai báo AppDatabase
     private TransactionDAO transactionDAO; // Khai báo TransactionDAO
+<<<<<<< HEAD
     private Button btnGoogleMaps;
     private ImageButton btn_notification ;
 
+=======
+    private ImageButton btnGoogleMaps;
+>>>>>>> 2a42f563b3eda31049ab46583fd27dce6a0336fd
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,17 +142,16 @@ public class activity_home extends AppCompatActivity {
         if (totalBalance != null) {
             totalExpense.setText("$" + totalBalance);
         } else {
-            totalExpense.setText("");
+            totalExpense.setText("0.0");
         }
     }
     // Phương thức để lấy tổng số expense từ cơ sở dữ liệu và cập nhật giao diện
-
     private void loadTotalIncome() {
         totalBalance = transactionDAO.getTotalIncome(userId);
         if (totalBalance != null) {
             totalIncome.setText("$" + totalBalance);
         } else {
-            totalIncome.setText("");
+            totalIncome.setText("0.0");
         }
     }
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightOrange"
-    android:paddingTop="64dp">
+    android:paddingTop="50dp">
 
     <!-- Nội dung có thể cuộn -->
     <ScrollView
@@ -16,34 +16,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="14dp">
 
             <!-- Tiêu đề -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="10dp"
                 android:text="Add Transaction"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <!-- Tiêu đề 'Expense' -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Expense"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
 
             <!-- Nhập Ngày -->
             <EditText
                 android:id="@+id/et_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/edit_text_bg"
                 android:hint="Date"
                 android:padding="12dp" />
@@ -65,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_bg"
-                android:hint="Expense"
+                android:hint="Amount"
                 android:padding="12dp" />
 
             <!-- Địa chỉ -->

@@ -72,6 +72,7 @@ public class activity_statistics extends AppCompatActivity {
 //        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, transactionList);
 //        listView.setAdapter(arrayAdapter);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_statistics);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -98,28 +99,60 @@ public class activity_statistics extends AppCompatActivity {
     }
 
     private void setData() {
-        // Set the percentage of language used
         transactionDAO = AppDatabase.getDatabase(this).TransactionDAO();
         Double expense = transactionDAO.getTotalExpense(userId);
         Double income = transactionDAO.getTotalIncome(userId);
+
+        if ((expense == null || expense == 0) && (income == null || income == 0)) {
+            // No data available for both expense and income
+            tvExpense.setText("0%");
+            tvIncome.setText("0%");
+            tvExpenseTotal.setText("0");
+            tvIncomeTotal.setText("0");
+            tvTotal.setText("0");
+
+            pieChart.clearChart(); // Clear the chart if there's no data
+            return;
+        }
+
+        // Handle missing or zero expense or income
+        if (expense == null || expense == 0) {
+            expense = 0.0;
+            tvExpense.setText("0%");
+            tvExpenseTotal.setText("0");
+        }
+        if (income == null || income == 0) {
+            income = 0.0;
+            tvIncome.setText("0%");
+            tvIncomeTotal.setText("0");
+        }
+
         Double total = expense + income;
-        Double debt = income-expense;
+        Double debt = income - expense;
 
-        // Chuyển đổi tỷ lệ thành số nguyên để sử dụng trong PieChart
-        int expensePercentage = (int) Math.round((expense / total) * 100);
-        int incomePercentage = (int) Math.round((income / total) * 100);
+        // Calculate percentages and handle cases where only one has a value
+        int expensePercentage = total > 0 ? (int) Math.round((expense / total) * 100) : 0;
+        int incomePercentage = total > 0 ? (int) Math.round((income / total) * 100) : 0;
 
-        // Đặt tỷ lệ phần trăm vào TextViews
+        // Set calculated values to TextViews
         tvExpense.setText(expensePercentage + "%");
         tvIncome.setText(incomePercentage + "%");
         tvExpenseTotal.setText(String.valueOf(expense));
         tvIncomeTotal.setText(String.valueOf(income));
         tvTotal.setText(String.valueOf(debt));
+        // Set data for the pie chart
+        pieChart.clearChart();
+        if (expense > 0) {
+            pieChart.addPieSlice(new PieModel("Expense", expensePercentage, Color.parseColor("#5cc2f2")));
+        }
+        if (income > 0) {
+            pieChart.addPieSlice(new PieModel("Income", incomePercentage, Color.parseColor("#66BB6A")));
+        }
 
-        // Set the data and color to the pie chart
-        pieChart.addPieSlice(new PieModel("Expense", expensePercentage, Color.parseColor("#5cc2f2")));
-        pieChart.addPieSlice(new PieModel("Income", incomePercentage, Color.parseColor("#66BB6A")));
-        // To animate the pie chart
-        pieChart.startAnimation();
+        // Animate the pie chart if there's data
+        if (total > 0) {
+            pieChart.startAnimation();
+        }
     }
+
 }

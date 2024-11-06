@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="10dp"
-                android:text="Add Transaction"
+                android:text="Update Transaction"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -326,7 +326,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/recyclerview"
-                android:layout_marginLeft="200dp"
+                android:layout_marginLeft="170dp"
                 android:layout_marginTop="10dp"
                 android:text="Back"
                 android:textSize="18sp"

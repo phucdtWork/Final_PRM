@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
 
@@ -45,6 +46,7 @@ public class activity_update_trans extends AppCompatActivity {
     private List<View> expenseButtons;
     private Button selectedButton = null;
     private Button btnUpdate;
+    private TextView tv_back;
 
     private AppDatabase appDatabase;
     private TransactionDAO transactionDAO;
@@ -56,6 +58,8 @@ public class activity_update_trans extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_update_trans);
+        tv_back = findViewById(R.id.tv_back);
+        tv_back.setOnClickListener(v -> onBack());
 
         initializeDatabase();
         hideSoftKeyBoard();
@@ -66,13 +70,21 @@ public class activity_update_trans extends AppCompatActivity {
 
     }
 
+    private void onBack() {
+        Intent intent = new Intent(activity_update_trans.this, activity_home.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void loadTransactionData() {
         transactionId = getIntent().getIntExtra("transaction_id", -1);
-        if (transactionId == -1) {
-            Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+//        if (transactionId == -1) {
+//            Toast.makeText(this, "Transaction not found", Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(activity_update_trans.this, activity_home.class);  // Thay PreviousActivity bằng tên màn hình trước đó
+//            startActivity(intent);
+//            finish();
+//            return;
+//        }
 
         TransactionEntity transaction = transactionDAO.getTransactionById(transactionId);
         if (transaction != null) {

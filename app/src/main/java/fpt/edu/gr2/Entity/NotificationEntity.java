@@ -1,25 +1,34 @@
 package fpt.edu.gr2.Entity;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "notifications")
+@Entity(
+        tableName = "notifications",
+        foreignKeys = @ForeignKey(
+                entity = UserEntity.class,
+                parentColumns = "user_id",
+                childColumns = "userId",
+                onDelete = ForeignKey.CASCADE // Xóa tất cả thông báo khi xóa người dùng
+        )
+)
 public class NotificationEntity {
 
     @PrimaryKey(autoGenerate = true)
     private int notificationId;
 
-    private int userId; // Foreign Key from User
-    private String message;
+    private int userId; // Foreign Key từ UserEntity
+    private String title; // Thêm trường title
+    private String content; // Thêm trường content
     private String date;
-    private boolean isRead;
 
     // Constructors, Getters, and Setters
-    public NotificationEntity(int userId, String message, String date, boolean isRead) {
+    public NotificationEntity(int userId, String title, String content, String date) {
         this.userId = userId;
-        this.message = message;
+        this.title = title;
+        this.content = content;
         this.date = date;
-        this.isRead = isRead;
     }
 
     public int getNotificationId() { return notificationId; }
@@ -28,13 +37,13 @@ public class NotificationEntity {
     public int getUserId() { return userId; }
     public void setUserId(int userId) { this.userId = userId; }
 
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
-
-    public boolean isRead() { return isRead; }
-    public void setRead(boolean read) { isRead = read; }
 }
 

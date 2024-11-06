@@ -122,7 +122,7 @@
         android:layout_marginBottom="423dp"
         android:background="@color/lightOrange"
         android:src="@drawable/baseline_location_pin_24"
-        />
+         />
 
     <TextView
         android:layout_width="wrap_content"

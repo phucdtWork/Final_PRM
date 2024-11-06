@@ -32,13 +32,9 @@ public class activity_home extends AppCompatActivity {
     private ActivityResultLauncher<Intent> addTransactionLauncher;
     private AppDatabase appDatabase; // Khai báo AppDatabase
     private TransactionDAO transactionDAO; // Khai báo TransactionDAO
-<<<<<<< HEAD
-    private Button btnGoogleMaps;
     private ImageButton btn_notification ;
-
-=======
     private ImageButton btnGoogleMaps;
->>>>>>> 2a42f563b3eda31049ab46583fd27dce6a0336fd
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

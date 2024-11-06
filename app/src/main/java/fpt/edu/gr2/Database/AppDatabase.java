@@ -17,7 +17,7 @@ import fpt.edu.gr2.Entity.StatisticEntity;
 import fpt.edu.gr2.Entity.TransactionEntity;
 import fpt.edu.gr2.Entity.UserEntity;
 
-@Database(entities = {UserEntity.class, TransactionEntity.class, CategoryEntity.class, NotificationEntity.class, StatisticEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {UserEntity.class, TransactionEntity.class, CategoryEntity.class, NotificationEntity.class, StatisticEntity.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDAO UserDAO();
 
@@ -35,6 +35,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public static synchronized AppDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DATABASE_NAME)
+                    .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
             // delete database if you want

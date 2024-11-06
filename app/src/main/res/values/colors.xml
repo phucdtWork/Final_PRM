@@ -10,5 +10,9 @@
     <color name="orangeLight">#FF9800</color>
     <color name="pink">#C96868</color>
     <color name="grey">#C7B7A3</color>
+<<<<<<< HEAD
+    <color name="green">#43A047</color>
+=======
     <color name="green">#66BB6A</color>
+>>>>>>> edb9dcfd51f22fa55fe25426624e0fa7bb531fb3
 </resources>

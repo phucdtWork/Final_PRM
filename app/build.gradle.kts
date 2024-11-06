@@ -63,15 +63,11 @@ dependencies {
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
-ll<<<<<<< HEAD
     //Dialogflow
     implementation("com.google.cloud:google-cloud-dialogflow:2.1.0")
     implementation("io.grpc:grpc-okhttp:1.30.0")
-
-=======
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.github.blackfizz:eazegraph:1.2.2@aar")
     implementation("com.nineoldandroids:library:2.4.0")
->>>>>>> edb9dcfd51f22fa55fe25426624e0fa7bb531fb3
 }
 

@@ -46,7 +46,7 @@ public class activity_transaction_list extends AppCompatActivity {
     private void innitView() {
         btnAddTrans = findViewById(R.id.btn_addTrans);
         searchView = findViewById(R.id.searchView);
-        recyclerView = findViewById(R.id.recyclerview);
+        recyclerView = findViewById(R.id.recyclerView);
         // Thiết lập RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         // Tạo danh sách sản phẩm mẫu

@@ -320,15 +320,19 @@
                 android:padding="16dp"
                 android:text="Save Change"
                 android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/recyclerview"
+                android:layout_marginLeft="200dp"
+                android:layout_marginTop="10dp"
+                android:text="Back"
+                android:textSize="18sp"
+                android:textColor="@color/orange"
+                />
+
         </LinearLayout>
     </ScrollView>
-
-    <!-- Thanh điều hướng dưới cùng -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_navigation_menu" />
 </RelativeLayout>

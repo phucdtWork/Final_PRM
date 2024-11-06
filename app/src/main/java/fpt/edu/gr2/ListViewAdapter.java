@@ -57,12 +57,12 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.Transa
 
                 // Xử lý sự kiện khi nhấn vào note
                 holder.tv_note.setOnClickListener(v -> {
-                    openUpdateTransactionActivity(TransactionEntity.getTransactionId());
+                    showTransactionDetailPopup(TransactionEntity);
                 });
 
                 // Xử lý sự kiện khi nhấn vào giá sản phẩm
                 holder.tv_date.setOnClickListener(v -> {
-                    openUpdateTransactionActivity(TransactionEntity.getTransactionId());
+                    showTransactionDetailPopup(TransactionEntity);
                 });
 
                 // Xử lý sự kiện khi nhấn nút chỉnh sửa
@@ -121,7 +121,33 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.Transa
     // Mở activity Updatetransaction
     private void openUpdateTransactionActivity(int transactionId) {
         Intent intent = new Intent(context, activity_update_trans.class);
-        intent.putExtra("transactionId", String.valueOf(transactionId));
-        activity.startActivityForResult(intent, 1);
+        intent.putExtra("transactionId", transactionId);
+        context.startActivity(intent);
+    }
+
+    // Hiển thị popup chi tiết giao dịch
+    private void showTransactionDetailPopup(TransactionEntity transactionEntity) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Transaction Details");
+
+        // Tạo layout cho popup
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_transaction_detail, null);
+        TextView detailNote = view.findViewById(R.id.detail_note);
+        TextView detailDate = view.findViewById(R.id.detail_date);
+        TextView detailAmount = view.findViewById(R.id.detail_amount);
+        TextView detailIsExpense = view.findViewById(R.id.detail_is_expense);
+//        TextView detailCategory = view.findViewById(R.id.detail_category);
+
+        // Gán dữ liệu từ transactionEntity vào các TextView
+        detailNote.setText(transactionEntity.getNote());
+        detailDate.setText(String.valueOf(transactionEntity.getDate()));
+        detailAmount.setText(String.valueOf(transactionEntity.getAmount()));
+        detailIsExpense.setText(transactionEntity.isExpense() ? "Expense" : "Income");
+
+
+        builder.setView(view);
+
+        builder.setPositiveButton("Close", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
     }
 }

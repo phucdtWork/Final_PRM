@@ -46,4 +46,8 @@ public interface TransactionDAO {
     @Query("SELECT * FROM transactions ORDER BY date DESC LIMIT 5")
     List<TransactionEntity> getRecentTransactions();
 
+    // Lay tat ca san pham, sap xep theo gia tang dan
+    @Query("SELECT * FROM transactions ORDER BY date ASC")
+    List<TransactionEntity> getTransactionsSortedByDate();
+
 }

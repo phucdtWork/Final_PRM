@@ -6,6 +6,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import fpt.edu.gr2.Adapters.ChatAdapter;
@@ -45,6 +47,7 @@ public class activity_help extends AppCompatActivity implements BotReply {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_help);
         chatView = findViewById(R.id.chatView);
         editMessage = findViewById(R.id.editMessage);

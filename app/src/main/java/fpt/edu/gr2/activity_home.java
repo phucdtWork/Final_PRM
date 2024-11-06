@@ -140,7 +140,7 @@ public class activity_home extends AppCompatActivity {
         tvViewAllTransactions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity_home.this, activity_addTransaction.class);
+                Intent intent = new Intent(activity_home.this, activity_transaction_list.class);
                 startActivity(intent);
             }
         });
@@ -187,7 +187,7 @@ public class activity_home extends AppCompatActivity {
         }
     }
 
-    // Load recent transaction
+    // Load danh sách giao dịch gần nhất
     public void loadRecentTransactions() {
         list.clear();
         List<TransactionEntity> productsFromDb = transactionDAO.getRecentTransactions(); // Gọi phương thức mới để lấy danh sách đã sắp xếp
@@ -198,7 +198,6 @@ public class activity_home extends AppCompatActivity {
             Toast.makeText(this, "No products available", Toast.LENGTH_SHORT).show();
         }
     }
-
 
     @Override
     protected void onResume() {

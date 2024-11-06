@@ -1,86 +1,115 @@
 package fpt.edu.gr2;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+import fpt.edu.gr2.Adapters.ChatAdapter;
+import fpt.edu.gr2.Helpers.SendMessageInBg;
+import fpt.edu.gr2.Interfaces.BotReply;
+import fpt.edu.gr2.Models.Message;
+import com.google.api.gax.core.FixedCredentialsProvider;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.cloud.dialogflow.v2.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2.QueryInput;
+import com.google.cloud.dialogflow.v2.SessionName;
+import com.google.cloud.dialogflow.v2.SessionsClient;
+import com.google.cloud.dialogflow.v2.SessionsSettings;
+import com.google.cloud.dialogflow.v2.TextInput;
+import com.google.common.collect.Lists;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
-public class activity_help extends AppCompatActivity {
+public class activity_help extends AppCompatActivity implements BotReply {
 
-    private EditText etMessage;
-    private ImageButton btnSend;
-    private LinearLayout chatContainer;
-    private ScrollView scrollViewChat;
+    RecyclerView chatView;
+    ChatAdapter chatAdapter;
+    List<Message> messageList = new ArrayList<>();
+    EditText editMessage;
+    ImageButton btnSend;
+
+    //dialogFlow
+    private SessionsClient sessionsClient;
+    private SessionName sessionName;
+    private String uuid = UUID.randomUUID().toString();
+    private String TAG = "mainactivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        chatView = findViewById(R.id.chatView);
+        editMessage = findViewById(R.id.editMessage);
+        btnSend = findViewById(R.id.btnSend);
 
-        // Liên kết các view với XML
-        etMessage = findViewById(R.id.et_message);
-        btnSend = findViewById(R.id.btn_send);
-        chatContainer = findViewById(R.id.chatContainer);
-        scrollViewChat = findViewById(R.id.scrollViewChat);
+        chatAdapter = new ChatAdapter(messageList, this);
+        chatView.setAdapter(chatAdapter);
 
-        // Xử lý nút Back
-        findViewById(R.id.btn_back).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish(); // Quay về màn hình trước đó
-            }
-        });
-
-        // Xử lý sự kiện gửi tin nhắn
         btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = etMessage.getText().toString().trim();
+            @Override public void onClick(View view) {
+                String message = editMessage.getText().toString();
                 if (!message.isEmpty()) {
-                    addMessageToChat(message, true); // Thêm tin nhắn từ người dùng
-                    etMessage.setText(""); // Xóa text sau khi gửi
-                    simulateSystemResponse(message); // Giả lập trả lời từ hệ thống
+                    messageList.add(new Message(message, false));
+                    editMessage.setText("");
+                    sendMessageToBot(message);
+                    Objects.requireNonNull(chatView.getAdapter()).notifyDataSetChanged();
+                    Objects.requireNonNull(chatView.getLayoutManager())
+                            .scrollToPosition(messageList.size() - 1);
                 } else {
-                    Toast.makeText(activity_help.this, "Please enter a message", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity_help.this, "Please enter text!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        setUpBot();
     }
 
-    // Hàm thêm tin nhắn vào giao diện chat
-    private void addMessageToChat(String message, boolean isUserMessage) {
-        TextView textView = new TextView(this);
-        textView.setText(message);
-        textView.setTextSize(16f);
-        textView.setPadding(16, 8, 16, 8);
-        if (isUserMessage) {
-            textView.setBackgroundResource(R.drawable.user_message_bg); // Background cho tin nhắn người dùng
-        } else {
-            textView.setBackgroundResource(R.drawable.system_message_bg); // Background cho tin nhắn hệ thống
+    private void setUpBot() {
+        try {
+            InputStream stream = this.getResources().openRawResource(R.raw.dialogflow_credentials);
+            GoogleCredentials credentials = GoogleCredentials.fromStream(stream)
+                    .createScoped(Lists.newArrayList("https://www.googleapis.com/auth/cloud-platform"));
+            String projectId = ((ServiceAccountCredentials) credentials).getProjectId();
+
+            SessionsSettings.Builder settingsBuilder = SessionsSettings.newBuilder();
+            SessionsSettings sessionsSettings = settingsBuilder.setCredentialsProvider(
+                    FixedCredentialsProvider.create(credentials)).build();
+            sessionsClient = SessionsClient.create(sessionsSettings);
+            sessionName = SessionName.of(projectId, uuid);
+
+            Log.d(TAG, "projectId : " + projectId);
+        } catch (Exception e) {
+            Log.d(TAG, "setUpBot: " + e.getMessage());
         }
-
-        // Thêm TextView vào container
-        chatContainer.addView(textView);
-
-        // Tự động cuộn xuống cuối cùng của ScrollView
-        scrollViewChat.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollViewChat.fullScroll(View.FOCUS_DOWN);
-            }
-        });
     }
 
-    // Giả lập phản hồi của hệ thống
-    private void simulateSystemResponse(String userMessage) {
-        // Tạo một phản hồi đơn giản
-        String systemResponse = "Hệ thống đã nhận được: " + userMessage;
-        addMessageToChat(systemResponse, false);
+    private void sendMessageToBot(String message) {
+        QueryInput input = QueryInput.newBuilder()
+                .setText(TextInput.newBuilder().setText(message).setLanguageCode("en-US")).build();
+        new SendMessageInBg(this, sessionName, sessionsClient, input).execute();
+    }
+
+    @Override
+    public void callback(DetectIntentResponse returnResponse) {
+        if(returnResponse!=null) {
+            String botReply = returnResponse.getQueryResult().getFulfillmentText();
+            if(!botReply.isEmpty()){
+                messageList.add(new Message(botReply, true));
+                chatAdapter.notifyDataSetChanged();
+                Objects.requireNonNull(chatView.getLayoutManager()).scrollToPosition(messageList.size() - 1);
+            }else {
+                Toast.makeText(this, "something went wrong", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "failed to connect!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

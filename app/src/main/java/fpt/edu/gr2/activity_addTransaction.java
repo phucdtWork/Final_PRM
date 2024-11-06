@@ -3,8 +3,8 @@ package fpt.edu.gr2;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,10 +17,15 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -30,6 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
+import fpt.edu.gr2.DAO.NotificationDAO;
 import fpt.edu.gr2.DAO.TransactionDAO;
 import fpt.edu.gr2.DAO.UserDAO;
 import fpt.edu.gr2.Database.AppDatabase;
@@ -37,7 +43,7 @@ import fpt.edu.gr2.Entity.TransactionEntity;
 import fpt.edu.gr2.Entity.UserEntity;
 
 public class activity_addTransaction extends AppCompatActivity {
-
+    private NotificationHelper notificationHelper;
     private EditText addDate, addNote, addAmount, addAddress;
     private Spinner transactionTypeSpinner;
     private GridLayout gridCategories;
@@ -45,12 +51,14 @@ public class activity_addTransaction extends AppCompatActivity {
     private List<View> expenseButtons;
     private Button selectedButton = null;
     private Button btnSave;
-    private boolean isExpense = true;
-    private int categoryId = -1;
 
     private AppDatabase appDatabase;
     private TransactionDAO transactionDAO;
     private UserDAO userDAO;
+
+    private NotificationDAO notificationDAO;
+    private boolean isExpense = true;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +70,13 @@ public class activity_addTransaction extends AppCompatActivity {
         handleSpinner();
         initViews();
         saveButton();
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
+            }
+        }
+        notificationHelper = new NotificationHelper(this);
+        // Thiết lập BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_add_transaction);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -172,6 +186,7 @@ public class activity_addTransaction extends AppCompatActivity {
         appDatabase = AppDatabase.getDatabase(this);
         transactionDAO = appDatabase.TransactionDAO();
         userDAO = appDatabase.UserDAO();
+        notificationDAO = appDatabase.NotificationDAO();
     }
 
     @SuppressLint("ResourceType")
@@ -280,6 +295,7 @@ public class activity_addTransaction extends AppCompatActivity {
     }
 
     private void addTransaction() {
+
         String date = addDate.getText().toString().trim();
         String note = addNote.getText().toString().trim();
         Double amount = 0.0;
@@ -304,6 +320,11 @@ public class activity_addTransaction extends AppCompatActivity {
             try {
                 transactionDAO.insertTransaction(transaction);
                 Toast.makeText(activity_addTransaction.this, "Transaction added successfully", Toast.LENGTH_SHORT).show();
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                    notificationHelper.showTransactionNotification(userId,"Transactions","Transaction added successfully");
+                } else {
+                    Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent1 = new Intent(activity_addTransaction.this, activity_home.class);
                 Intent intent = new Intent();
                 intent.putExtra("amount", amount);

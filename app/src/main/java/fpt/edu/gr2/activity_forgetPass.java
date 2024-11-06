@@ -98,7 +98,7 @@ public class activity_forgetPass extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(activity_forgetPass.this, "User not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity_forgetPass.this, "User check information when forgot password failed", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();

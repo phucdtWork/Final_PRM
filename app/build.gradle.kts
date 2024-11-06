@@ -7,6 +7,14 @@ android {
     namespace = "fpt.edu.gr2"
     compileSdk = 34
 
+    packaging {
+        resources {
+            exclude("META-INF/INDEX.LIST")
+            exclude("META-INF/DEPENDENCIES")
+            exclude("META-INF/*.kotlin_module'")
+        }
+    }
+
     defaultConfig {
         applicationId = "fpt.edu.gr2"
         minSdk = 21
@@ -55,6 +63,10 @@ dependencies {
     val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
+    //Dialogflow
+    implementation("com.google.cloud:google-cloud-dialogflow:2.1.0")
+    implementation("io.grpc:grpc-okhttp:1.30.0")
+
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.github.blackfizz:eazegraph:1.2.2@aar")
     implementation("com.nineoldandroids:library:2.4.0")

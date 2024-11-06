@@ -46,23 +46,7 @@
             android:hint="Enter your username"
             android:padding="12dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
-            android:text="New Password"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/et_new_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="14dp"
-            android:background="@drawable/edit_text_bg"
-            android:hint="Enter new password"
-            android:inputType="textPassword"
-            android:padding="12dp" />
 
 
         <!-- Security Question -->
@@ -98,6 +82,24 @@
             android:layout_marginBottom="14dp"
             android:background="@drawable/edit_text_bg"
             android:hint="Enter your answer"
+            android:padding="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:text="New Password"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/et_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="14dp"
+            android:background="@drawable/edit_text_bg"
+            android:hint="Enter new password"
+            android:inputType="textPassword"
             android:padding="12dp" />
 
         <!-- Nhập Confirm Password -->

@@ -38,4 +38,8 @@ public interface TransactionDAO {
     @Query("SELECT SUM(amount) FROM transactions WHERE isExpense = 0 AND userid= :userid" )
     Double getTotalIncome(int userid);
 
+    // Tim kiem san pham co ten giong voi truy van (searchQuery)
+    @Query("SELECT * FROM transactions WHERE note LIKE '%' || :searchQuery || '%'")
+    List<TransactionEntity> searchTransaction(String searchQuery);
+
 }

@@ -32,7 +32,9 @@ public class activity_home extends AppCompatActivity {
     private ActivityResultLauncher<Intent> addTransactionLauncher;
     private AppDatabase appDatabase; // Khai báo AppDatabase
     private TransactionDAO transactionDAO; // Khai báo TransactionDAO
+    private ImageButton btn_notification ;
     private ImageButton btnGoogleMaps;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class activity_home extends AppCompatActivity {
         totalExpense = findViewById(R.id.tv_total_expense);
         totalIncome = findViewById(R.id.tv_total_income);
         btnGoogleMaps = findViewById(R.id.btn_google_map);
+        btn_notification= findViewById(R.id.btn_notification);
+
+        btn_notification.setOnClickListener(v->Notification());
         // chuyển sang trang google maps
         btnGoogleMaps.setOnClickListener(v -> {
             Intent intent = new Intent(activity_home.this, activity_maps.class);
@@ -119,6 +124,12 @@ public class activity_home extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void Notification() {
+        Intent intent= new Intent(activity_home.this,NotificationActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     // Phương thức để lấy tổng số expense từ cơ sở dữ liệu và cập nhật giao diện

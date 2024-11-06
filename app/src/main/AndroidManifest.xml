@@ -22,7 +22,7 @@
             android:name=".activity_update_trans"
             android:exported="false" />
         <activity
-            android:name=".activity_edit_trans"
+            android:name=".activity_trans_detail"
             android:exported="false" />
         <activity
             android:name=".activity_transaction_list"

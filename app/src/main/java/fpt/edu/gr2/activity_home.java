@@ -6,18 +6,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fpt.edu.gr2.DAO.TransactionDAO;
 import fpt.edu.gr2.Database.AppDatabase;
+import fpt.edu.gr2.Entity.TransactionEntity;
 
 public class activity_home extends AppCompatActivity {
 
@@ -32,8 +40,12 @@ public class activity_home extends AppCompatActivity {
     private ActivityResultLauncher<Intent> addTransactionLauncher;
     private AppDatabase appDatabase; // Khai báo AppDatabase
     private TransactionDAO transactionDAO; // Khai báo TransactionDAO
+    private TransactionEntity transactionEntity;
     private ImageButton btn_notification ;
     private ImageButton btnGoogleMaps;
+    private RecyclerView recyclerView;
+    private ListViewAdapter listViewAdapter;
+    private List<TransactionEntity> list = new ArrayList<>();
 
 
     @Override
@@ -80,8 +92,6 @@ public class activity_home extends AppCompatActivity {
                 }
         );
 
-
-
 //        // Lấy button từ layout
 //        Button btnAddTransaction = findViewById(R.id.btn_add_transaction);
 //
@@ -124,6 +134,32 @@ public class activity_home extends AppCompatActivity {
                 return false;
             }
         });
+
+        //View all transaction
+        TextView tvViewAllTransactions = findViewById(R.id.tvViewAllTransactions);
+        tvViewAllTransactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity_home.this, activity_addTransaction.class);
+                startActivity(intent);
+            }
+        });
+
+        initView();
+    }
+
+    private void initView() {
+        recyclerView = findViewById(R.id.recyclerview);
+
+        // Set up RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Initialize adapter with empty list
+        listViewAdapter = new ListViewAdapter(this, list, activity_home.this);
+        recyclerView.setAdapter(listViewAdapter);
+
+        // Load initial product list
+        loadRecentTransactions();
     }
 
     private void Notification() {
@@ -151,11 +187,25 @@ public class activity_home extends AppCompatActivity {
         }
     }
 
+    // Load recent transaction
+    public void loadRecentTransactions() {
+        list.clear();
+        List<TransactionEntity> productsFromDb = transactionDAO.getRecentTransactions(); // Gọi phương thức mới để lấy danh sách đã sắp xếp
+        if (productsFromDb != null && !productsFromDb.isEmpty()) {
+            list.addAll(productsFromDb);
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "No products available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
         // Cập nhật lại tổng số expense khi Activity trở lại foreground
         loadTotalExpense();
         loadTotalIncome();
+        loadRecentTransactions();
     }
 }

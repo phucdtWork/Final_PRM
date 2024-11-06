@@ -1,6 +1,5 @@
 package fpt.edu.gr2;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,66 +21,66 @@ import fpt.edu.gr2.Entity.TransactionEntity;
 
 import java.util.List;
 
-public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.EventViewHolder> {
+public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.TransactionViewHolder> {
     Context context;
-    List<TransactionEntity> eventEntities;
+    List<TransactionEntity> transactionEntities;
     Activity activity;
     private TransactionDAO TransactionDAO;
 
     // Constructor của adapter, nhận vào context, danh sách sản phẩm và activity
-    public ListViewAdapter(Context context, List<TransactionEntity> eventEntities, Activity activity) {
+    public ListViewAdapter(Context context, List<TransactionEntity> transactionEntities, Activity activity) {
         this.context = context;
-        this.eventEntities = eventEntities;
+        this.transactionEntities = transactionEntities;
         this.activity = activity;
         this.TransactionDAO = AppDatabase.getDatabase(context).TransactionDAO(); // Khởi tạo một lần
     }
 
     @NonNull
     @Override
-    public ListViewAdapter.EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TransactionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Khởi tạo LayoutInflater và tạo view cho mỗi item
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.transaction_item, parent, false);
-        return new EventViewHolder(view);
+        return new TransactionViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ListViewAdapter.EventViewHolder holder, int position) {
-        if (eventEntities != null && !eventEntities.isEmpty()) {
-            TransactionEntity TransactionEntity = eventEntities.get(position);
+    public void onBindViewHolder(@NonNull TransactionViewHolder holder, int position) {
+        if (transactionEntities != null && !transactionEntities.isEmpty()) {
+            TransactionEntity TransactionEntity = transactionEntities.get(position);
             if (TransactionEntity != null) {
-                // Hiển thị tên, giá và số lượng sản phẩm
-                holder.tv_name.setText(TransactionEntity.getCategoryId());
+                // Hiển thị phan loai, ngay, gia tri, loai
+                holder.tv_note.setText(TransactionEntity.getNote());
                 holder.tv_date.setText(String.valueOf(TransactionEntity.getDate()));
-                holder.tv_location.setText(String.valueOf(TransactionEntity.getLocation()));
-                //descrip
+                holder.tv_is_expense.setText(transactionEntities.get(position).isExpense() ? "Expense" : "Income");
+                holder.tv_amount.setText(String.valueOf(TransactionEntity.getAmount()));
 
-                // Xử lý sự kiện khi nhấn vào tên sản phẩm
-                holder.tv_name.setOnClickListener(v -> {
-                    openUpdateeventActivity(TransactionEntity.getTransactionId());
+                // Xử lý sự kiện khi nhấn vào note
+                holder.tv_note.setOnClickListener(v -> {
+                    openUpdateTransactionActivity(TransactionEntity.getTransactionId());
                 });
 
                 // Xử lý sự kiện khi nhấn vào giá sản phẩm
                 holder.tv_date.setOnClickListener(v -> {
-                    openUpdateeventActivity(TransactionEntity.getTransactionId());
+                    openUpdateTransactionActivity(TransactionEntity.getTransactionId());
                 });
 
                 // Xử lý sự kiện khi nhấn nút chỉnh sửa
                 holder.editbtn.setOnClickListener(v -> {
-                    openUpdateeventActivity(TransactionEntity.getTransactionId());
+                    openUpdateTransactionActivity(TransactionEntity.getTransactionId());
                 });
 
                 // Xử lý sự kiện khi nhấn nút xóa
                 holder.deletebtn.setOnClickListener(view -> {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle("Delete Event")
-                            .setMessage("Are you sure you want to delete this event?")
+                    builder.setTitle("Delete transaction")
+                            .setMessage("Are you sure you want to delete this transaction?")
                             .setPositiveButton("OK", (dialogInterface, i) -> {
                                 TransactionDAO.deleteTransaction(TransactionEntity.getTransactionId());
-                                eventEntities.remove(position); // Xóa sản phẩm khỏi danh sách
+                                transactionEntities.remove(position); // Xóa sản phẩm khỏi danh sách
                                 notifyItemRemoved(position);
-                                notifyItemRangeChanged(position, eventEntities.size());
-                                Toast.makeText(context, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                                notifyItemRangeChanged(position, transactionEntities.size());
+                                Toast.makeText(context, "transaction deleted successfully", Toast.LENGTH_SHORT).show();
                                 dialogInterface.dismiss();
                             })
                             .setNegativeButton("CANCEL", (dialogInterface, i) -> {
@@ -98,30 +97,31 @@ public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.EventV
 
     @Override
     public int getItemCount() {
-        return eventEntities != null ? eventEntities.size() : 0; // Kiểm tra null
+        return transactionEntities != null ? transactionEntities.size() : 0; // Kiểm tra null
     }
 
     // Class holder chứa các view của một sản phẩm
-    public static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_name, tv_date, tv_location, tv_des;
+    public static class TransactionViewHolder extends RecyclerView.ViewHolder {
+        TextView tv_note, tv_date, tv_is_expense, tv_amount;
         ImageButton editbtn, deletebtn;
 
-        public EventViewHolder(@NonNull View itemView) {
+        public TransactionViewHolder(@NonNull View itemView) {
             super(itemView);
             // Gán view cho các biến trong holder
-            tv_name = itemView.findViewById(R.id.tv_name);
+            tv_note = itemView.findViewById(R.id.tv_note);
             tv_date = itemView.findViewById(R.id.tv_date);
-            tv_location = itemView.findViewById(R.id.tv_location);
-            //descrip
+            tv_is_expense = itemView.findViewById(R.id.tv_is_expense);
+            tv_amount = itemView.findViewById(R.id.tv_amount);
+            //button
             editbtn = itemView.findViewById(R.id.editbtn);
             deletebtn = itemView.findViewById(R.id.deletebtn);
         }
     }
 
-    // Mở activity Updateevent
-    private void openUpdateeventActivity(int eventId) {
-        Intent intent = new Intent(context, activity_edit_trans.class);
-        intent.putExtra("eventId", String.valueOf(eventId));
+    // Mở activity Updatetransaction
+    private void openUpdateTransactionActivity(int transactionId) {
+        Intent intent = new Intent(context, activity_update_trans.class);
+        intent.putExtra("transactionId", String.valueOf(transactionId));
         activity.startActivityForResult(intent, 1);
     }
 }

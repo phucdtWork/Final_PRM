@@ -42,4 +42,8 @@ public interface TransactionDAO {
     @Query("SELECT * FROM transactions WHERE note LIKE '%' || :searchQuery || '%'")
     List<TransactionEntity> searchTransaction(String searchQuery);
 
+    // New method to select the 5 most recent transactions
+    @Query("SELECT * FROM transactions ORDER BY date DESC LIMIT 5")
+    List<TransactionEntity> getRecentTransactions();
+
 }

@@ -1,10 +1,334 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_update_trans">
+    android:background="@color/lightOrange"
+    android:paddingTop="50dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Nội dung có thể cuộn -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- Tiêu đề -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:text="Add Transaction"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+
+            <!-- Nhập Ngày -->
+            <EditText
+                android:id="@+id/et_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Date"
+                android:padding="12dp" />
+
+            <!-- Ghi chú -->
+            <EditText
+                android:id="@+id/et_note"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Note"
+                android:padding="12dp" />
+
+            <!-- Nhập số tiền -->
+            <EditText
+                android:id="@+id/et_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Amount"
+                android:padding="12dp" />
+
+            <!-- Địa chỉ -->
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Address"
+                android:padding="12dp"
+                />
+
+            <!-- Loại giao dịch -->
+            <Spinner
+                android:id="@+id/spinner_transaction_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_down"
+                android:padding="12dp"
+                android:entries="@array/transaction_types"
+                android:popupBackground="@color/white"/>
+
+            <!-- Tiêu đề 'Category' -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:paddingLeft="2dp"
+                android:text="Category"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <!-- GridLayout chứa các nút danh mục -->
+            <GridLayout
+                android:id="@+id/grid_categories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:alignmentMode="alignMargins"
+                android:columnCount="3"
+                android:rowCount="4"
+                android:useDefaultMargins="true">
+
+                <!-- Category Buttons -->
+                <Button
+                    android:id="@+id/btn_food"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_food"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Food"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_houseware"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_houseware"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Houseware"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_clothes"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_clothes"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Clothes"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_cosmetic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_cosmetic"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Cosmetic"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_exchange"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_exchange"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Exchange"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_medical"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_medical"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Medical"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_education"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_education"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Education"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_electric"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_electric_bill"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Electric Bill"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_transportation"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_transportation"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Transportation"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_housing"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_housing_expenses"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Housing"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_contact_fee"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_contact_fee"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Contact Fee"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_entertainment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_entertainment"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Entertainment"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_salary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_salary"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Salary"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_pocket"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_pocket"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Pocket"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_bonus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_bonus"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Bonus"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_investment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_investment"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Investment"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_extra"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_extra"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Extra"
+                    android:textColor="@color/black" />
+
+            </GridLayout>
+
+            <!-- Nút Lưu -->
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:backgroundTint="@color/black"
+                android:padding="16dp"
+                android:text="Save Change"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Thanh điều hướng dưới cùng -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_navigation_menu" />
+</RelativeLayout>

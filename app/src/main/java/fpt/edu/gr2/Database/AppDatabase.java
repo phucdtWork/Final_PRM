@@ -39,7 +39,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     .allowMainThreadQueries()
                     .build();
 //             delete database if you want
-            context.deleteDatabase("final_PRM");
+//            context.deleteDatabase("final_PRM");
         }
         return INSTANCE;
     }

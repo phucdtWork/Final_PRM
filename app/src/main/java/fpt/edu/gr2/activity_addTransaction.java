@@ -2,6 +2,7 @@ package fpt.edu.gr2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,6 +49,8 @@ public class activity_addTransaction extends AppCompatActivity {
     private NotificationDAO notificationDAO;
     private boolean isExpense = true;
     private int categoryId;
+    private static final String PREFS_NAME = "NotificationPrefs";
+    private static final String KEY_NOTIFICATIONS_ENABLED = "notifications_enabled";
 
 
     @Override
@@ -188,10 +191,14 @@ public class activity_addTransaction extends AppCompatActivity {
 
                 transactionDAO.insertTransaction(transaction);
                 Toast.makeText(activity_addTransaction.this, "Transaction added successfully", Toast.LENGTH_SHORT).show();
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                    notificationHelper.showTransactionNotification(userId,"Transactions","Transaction added successfully");
+                // Kiểm tra trạng thái thông báo từ SharedPreferences
+                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                boolean notificationsEnabled = prefs.getBoolean(KEY_NOTIFICATIONS_ENABLED, false);
+
+                if (notificationsEnabled) {
+                    notificationHelper.showTransactionNotification(userId, "Transactions", "Transaction added successfully");
                 } else {
-                    Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Notifications are disabled", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent1 = new Intent(activity_addTransaction.this, activity_home.class);
                 Intent intent = new Intent();

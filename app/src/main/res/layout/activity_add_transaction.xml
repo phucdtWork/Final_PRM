@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -68,7 +68,8 @@
                 android:layout_marginTop="8dp"
                 android:background="@drawable/edit_text_bg"
                 android:hint="Address"
-                android:padding="12dp" />
+                android:padding="12dp"
+                />
 
             <!-- Loại giao dịch -->
             <Spinner
@@ -76,9 +77,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/edit_text_bg"
+                android:background="@drawable/ic_down"
+                android:padding="12dp"
                 android:entries="@array/transaction_types"
-                android:padding="12dp" />
+                android:popupBackground="@color/white"/>
 
             <!-- Tiêu đề 'Category' -->
             <TextView
@@ -235,15 +237,75 @@
                     android:textColor="@color/black" />
 
                 <Button
-                    android:id="@+id/btn_edit"
+                    android:id="@+id/btn_entertainment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_columnWeight="1"
                     android:background="@drawable/category_button_bg"
-                    android:drawableTop="@drawable/ic_edit"
+                    android:drawableTop="@drawable/ic_entertainment"
                     android:gravity="center"
                     android:singleLine="true"
-                    android:text="Edit"
+                    android:text="Entertainment"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_salary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_salary"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Salary"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_pocket"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_pocket"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Pocket"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_bonus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_bonus"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Bonus"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_investment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_investment"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Investment"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_extra"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/ic_extra"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:text="Extra"
                     android:textColor="@color/black" />
 
             </GridLayout>

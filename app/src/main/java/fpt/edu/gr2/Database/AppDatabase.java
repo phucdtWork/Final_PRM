@@ -38,8 +38,8 @@ public abstract class AppDatabase extends RoomDatabase {
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
-            // delete database if you want
-//            context.deleteDatabase("final_PRM");
+//             delete database if you want
+            context.deleteDatabase("final_PRM");
         }
         return INSTANCE;
     }

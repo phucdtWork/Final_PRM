@@ -13,9 +13,9 @@
     </string-array>
 
     <string-array name="transaction_types">
-        <item>Select a transaction type</item> <!-- Item mặc định -->
-        <item>Income</item>
+         <!-- Item mặc định -->
         <item>Expense</item>
+        <item>Income</item>
     </string-array>
 
 </resources>

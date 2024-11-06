@@ -1,7 +1,9 @@
 package fpt.edu.gr2;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.Manifest;
@@ -30,6 +33,9 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fpt.edu.gr2.DAO.NotificationDAO;
 import fpt.edu.gr2.DAO.TransactionDAO;
 import fpt.edu.gr2.DAO.UserDAO;
@@ -40,24 +46,33 @@ import fpt.edu.gr2.Entity.UserEntity;
 public class activity_addTransaction extends AppCompatActivity {
     private NotificationHelper notificationHelper;
     private EditText addDate, addNote, addAmount, addAddress;
-    private Spinner transactiontypeSelect;
+    private Spinner transactionTypeSpinner;
+    private GridLayout gridCategories;
+    private List<View> incomeButtons;
+    private List<View> expenseButtons;
+    private Button selectedButton = null;
     private Button btnSave;
+
     private AppDatabase appDatabase;
     private TransactionDAO transactionDAO;
     private UserDAO userDAO;
+
     private NotificationDAO notificationDAO;
     private boolean isExpense = true;
     private int categoryId;
-
+    private static final String PREFS_NAME = "NotificationPrefs";
+    private static final String KEY_NOTIFICATIONS_ENABLED = "notifications_enabled";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_transaction);
-        initViews();
         initializeDatabase();
         hideSoftKeyBoard();
+        handleSpinner();
+        initViews();
+        saveButton();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
@@ -66,11 +81,8 @@ public class activity_addTransaction extends AppCompatActivity {
         notificationHelper = new NotificationHelper(this);
         // Thiết lập BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
-        // Đặt mục Add Transaction là mục đã chọn
         bottomNavigationView.setSelectedItemId(R.id.navigation_add_transaction);
-        // Set sự kiện chọn item cho BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
@@ -98,20 +110,70 @@ public class activity_addTransaction extends AppCompatActivity {
                 return false;
             }
         });
+    }
 
-
-        transactiontypeSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    private void handleSpinner() {
+        transactionTypeSpinner = findViewById(R.id.spinner_transaction_type);
+        initializeCategoryButtons();
+        transactionTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 isExpense = parent.getItemAtPosition(position).toString().equals("Expense");
+                updateCategoryButtons(isExpense);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                // Không làm gì nếu không chọn gì cả
             }
         });
+    }
+
+    private void initializeCategoryButtons() {
+        incomeButtons = new ArrayList<>();
+        expenseButtons = new ArrayList<>();
+
+        // Các nút thuộc Income
+        incomeButtons.add(findViewById(R.id.btn_salary));
+        incomeButtons.add(findViewById(R.id.btn_pocket));
+        incomeButtons.add(findViewById(R.id.btn_bonus));
+        incomeButtons.add(findViewById(R.id.btn_investment));
+        incomeButtons.add(findViewById(R.id.btn_extra));
+
+        // Các nút thuộc Expense
+        expenseButtons.add(findViewById(R.id.btn_food));
+        expenseButtons.add(findViewById(R.id.btn_houseware));
+        expenseButtons.add(findViewById(R.id.btn_clothes));
+        expenseButtons.add(findViewById(R.id.btn_cosmetic));
+        expenseButtons.add(findViewById(R.id.btn_exchange));
+        expenseButtons.add(findViewById(R.id.btn_medical));
+        expenseButtons.add(findViewById(R.id.btn_education));
+        expenseButtons.add(findViewById(R.id.btn_electric));
+        expenseButtons.add(findViewById(R.id.btn_transportation));
+        expenseButtons.add(findViewById(R.id.btn_housing));
+        expenseButtons.add(findViewById(R.id.btn_contact_fee));
+        expenseButtons.add(findViewById(R.id.btn_entertainment));
+    }
+
+    private void updateCategoryButtons(boolean transactionType) {
+        // Ẩn tất cả các nút trước
+        for (View button : incomeButtons) {
+            button.setVisibility(View.GONE);
+        }
+        for (View button : expenseButtons) {
+            button.setVisibility(View.GONE);
+        }
+
+        // Hiển thị nút tùy theo loại giao dịch
+        if (transactionType == false) {
+            for (View button : incomeButtons) {
+                button.setVisibility(View.VISIBLE);
+            }
+        } else if (transactionType) {
+            for (View button : expenseButtons) {
+                button.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     public void hideSoftKeyBoard() {
@@ -130,35 +192,110 @@ public class activity_addTransaction extends AppCompatActivity {
         notificationDAO = appDatabase.NotificationDAO();
     }
 
+    @SuppressLint("ResourceType")
     private void initViews() {
         addDate = findViewById(R.id.et_date);
         addNote = findViewById(R.id.et_note);
         addAmount = findViewById(R.id.et_amount);
         addAddress = findViewById(R.id.et_address);
+        gridCategories = findViewById(R.id.grid_categories);
+        for (int i = 0; i < gridCategories.getChildCount(); i++) {
+            View view = gridCategories.getChildAt(i);
+            if (view instanceof Button) {
+                Button button = (Button) view;
+                button.setOnClickListener(v -> {
+                    // Đặt lại màu cho button trước đó (nếu có)
+                    if (selectedButton != null) {
+                        selectedButton.setSelected(false);
+                        selectedButton.setBackgroundResource(R.drawable.category_button_bg);
+                    }
+                    // Cập nhật button đang được chọn
+                    selectedButton = button;
+                    Log.d("CategorySelection", "Selected button: " + selectedButton.getText());
+                    // Đặt màu cho button đang chọn
+                    selectedButton.setSelected(true);
+                    selectedButton.setBackgroundResource(R.drawable.category_button_selected_bg);
+                    categoryId = getCategoryId(selectedButton.getText().toString());
+                    Log.d("CategorySelection", "Updated categoryId: " + categoryId);
+                });
+            }
+        }
+    }
+
+    private void saveButton() {
         btnSave = findViewById(R.id.btn_save);
-        transactiontypeSelect = findViewById(R.id.spinner_transaction_type);
-
-        // Category buttons
-        Button btnFood = findViewById(R.id.btn_food);
-        Button btnHouseware = findViewById(R.id.btn_houseware);
-        Button btnClothes = findViewById(R.id.btn_clothes);
-        Button btnCosmetic = findViewById(R.id.btn_cosmetic);
-        Button btnExchange = findViewById(R.id.btn_exchange);
-
-        // Set click listeners for category buttons
-        btnFood.setOnClickListener(v -> setCategory(1)); // Example categoryId for Food
-        btnHouseware.setOnClickListener(v -> setCategory(2)); // Example categoryId for Houseware
-        btnClothes.setOnClickListener(v -> setCategory(3)); // Example categoryId for Clothes
-        btnCosmetic.setOnClickListener(v -> setCategory(4)); // Example categoryId for Cosmetic
-        btnExchange.setOnClickListener(v -> setCategory(5)); // Example categoryId for Exchange
-
-        btnSave.setOnClickListener(v -> addTransaction());
-    }
-    private void setCategory(int id) {
-        categoryId = id;
-        Toast.makeText(this, "Selected Category ID: " + categoryId, Toast.LENGTH_SHORT).show();
+        btnSave.setOnClickListener(view -> {
+            Log.d("SaveButton", "Selected button ID: " + (selectedButton != null ? getCategoryId(String.valueOf(selectedButton.getText())) : "null"));
+            // Check if a category button has been selected
+            if (selectedButton != null) {
+                // Proceed to add transaction if validation passes
+                addTransaction();
+            } else {
+                // If no category is selected, show an appropriate message
+                Toast.makeText(activity_addTransaction.this, "Please select a category", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    private int getCategoryId(String id) {
+        switch (id) {
+            case "Food":
+                categoryId = 1;
+                break;
+            case "Houseware":
+                categoryId = 2;
+                break;
+            case "Clothes":
+                categoryId = 3;
+                break;
+            case "Cosmetic":
+                categoryId = 4;
+                break;
+            case "Exchange":
+                categoryId = 5;
+                break;
+            case "Medical":
+                categoryId = 6;
+                break;
+            case "Education":
+                categoryId = 7;
+                break;
+            case "Electric Bill":
+                categoryId = 8;
+                break;
+            case "Transportation":
+                categoryId = 9;
+                break;
+            case "Housing":
+                categoryId = 10;
+                break;
+            case "Contact Fee":
+                categoryId = 11;
+                break;
+            case "Entertainment":
+                categoryId = 12;
+                break;
+            case "Salary":
+                categoryId = 13;
+                break;
+            case "Pocket":
+                categoryId = 14;
+                break;
+            case "Bonus":
+                categoryId = 15;
+                break;
+            case "Investment":
+                categoryId = 16;
+                break;
+            case "Extra":
+                categoryId = 17;
+                break;
+            default:
+                categoryId = -1;
+                break;
+        }
+        return categoryId;
+    }
 
     private void addTransaction() {
 
@@ -166,7 +303,6 @@ public class activity_addTransaction extends AppCompatActivity {
         String note = addNote.getText().toString().trim();
         Double amount = 0.0;
         String address = addAddress.getText().toString().trim();
-//        int categoryId = 1;
         try {
             amount = Double.parseDouble(addAmount.getText().toString().trim());
         } catch (NumberFormatException e) {
@@ -185,13 +321,16 @@ public class activity_addTransaction extends AppCompatActivity {
         if (checkValidation()) {
             TransactionEntity transaction = new TransactionEntity(userId, date, categoryId, amount, note, address, isExpense);
             try {
-
                 transactionDAO.insertTransaction(transaction);
                 Toast.makeText(activity_addTransaction.this, "Transaction added successfully", Toast.LENGTH_SHORT).show();
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
-                    notificationHelper.showTransactionNotification(userId,"Transactions","Transaction added successfully");
+                // Kiểm tra trạng thái thông báo từ SharedPreferences
+                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                boolean notificationsEnabled = prefs.getBoolean(KEY_NOTIFICATIONS_ENABLED, false);
+
+                if (notificationsEnabled) {
+                    notificationHelper.showTransactionNotification(userId, "Transactions", "Transaction added successfully");
                 } else {
-                    Toast.makeText(this, "Notification permission not granted", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Notifications are disabled", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent1 = new Intent(activity_addTransaction.this, activity_home.class);
                 Intent intent = new Intent();
@@ -202,32 +341,29 @@ public class activity_addTransaction extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(activity_addTransaction.this, "Error during adding transaction", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity_addTransaction.this, activity_addTransaction.class);
-                startActivity(intent);
-                finish();
             }
         }
     }
 
-
     private boolean checkValidation() {
         String date = addDate.getText().toString().trim();
         String note = addNote.getText().toString().trim();
-        Double amount = Double.parseDouble(addAmount.getText().toString().trim());
+        String amountText = addAmount.getText().toString().trim();
         String address = addAddress.getText().toString().trim();
 
-        Log.d("checkValidation", "Date: " + date + ", Note: " + note + ", Amount: " + amount + ", Address: " + address);
-        if (TextUtils.isEmpty(date) || TextUtils.isEmpty(amount.toString())) {
+        Log.d("checkValidation", "Date: " + date + ", Note: " + note + ", Amount: " + amountText + ", Address: " + address);
+        Log.d("checkValidation", "CategoryId: " + categoryId);
+
+        if (TextUtils.isEmpty(date) || TextUtils.isEmpty(amountText)) {
             Toast.makeText(activity_addTransaction.this, "Please enter Date and Expense", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (categoryId == 0) { // Assuming categoryId is 0 if not set
-            Toast.makeText(activity_addTransaction.this, "Please select a Category", Toast.LENGTH_SHORT).show();
+        if (categoryId == -1) {
+            Toast.makeText(activity_addTransaction.this, "Category has not been selected", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         return true;
     }
-
 
 }

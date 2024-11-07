@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightOrange"
-    android:paddingTop="50dp">
+    android:paddingTop="30dp">
 
     <!-- Nội dung có thể cuộn -->
     <ScrollView

@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,93 +21,126 @@ import java.util.List;
 
 public class activity_transaction_list extends AppCompatActivity {
     private Button btnAddTrans;
-    private AppDatabase appData;
-    private TransactionDAO eventDao;
+    private AppDatabase appDatabase;
+    private TransactionDAO transactionDAO;
     private RecyclerView recyclerView;
-    public ListViewAdapter listViewApdapter;
-    List<TransactionEntity> list = new ArrayList<>();
+    private ListViewAdapter listViewAdapter;
+    private List<TransactionEntity> transactionList = new ArrayList<>();
     private SearchView searchView;
-//    private ImageButton btnFilter;
+    private ImageButton btnFilter;
+    private ImageButton btn_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        innitData();
-        innitView();
-    }
+        setContentView(R.layout.activity_transaction_list);
 
-    private void innitData() {
-        AppDatabase appData = AppDatabase.getDatabase(this);
-        eventDao = appData.TransactionDAO();
-    }
+        // Initialize database and DAO
+        appDatabase = AppDatabase.getDatabase(this);
+        transactionDAO = appDatabase.TransactionDAO();
 
-    private void innitView() {
+        // Initialize UI components
         btnAddTrans = findViewById(R.id.btn_addTrans);
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recyclerView);
-        // Thiết lập RecyclerView
+        btnFilter = findViewById(R.id.ed_filter);
+        btn_back = findViewById(R.id.btn_back);
+
+        // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        // Tạo danh sách sản phẩm mẫu
-        list = new ArrayList<>();
-        //phần này phần add dữ liệu cứng vô
-        list.add(new TransactionEntity());
-        listViewApdapter = new ListViewAdapter(this, list, activity_transaction_list.this);
-        recyclerView.setAdapter(listViewApdapter);
-        loadEvents();
-        searchEvent();
-        btnAddTrans.setOnClickListener(v -> addEvent());
+        listViewAdapter = new ListViewAdapter(this, transactionList, activity_transaction_list.this);
+        recyclerView.setAdapter(listViewAdapter);
 
+        // Load initial transaction list
+        loadTransactions();
 
+        // Set up listeners
+        btnAddTrans.setOnClickListener(v -> openAddTransaction());
+        btnFilter.setOnClickListener(v -> filterTransactions());
+        searchTransactions();
+
+        // Thêm sự kiện onClick cho btn_back
+        btn_back.setOnClickListener(v -> onBack());
     }
 
-    // search Event theo tên
-    private void searchEvent() {
+    private void onBack() {
+        Intent intent = new Intent(activity_transaction_list.this, activity_home.class);
+        startActivity(intent);
+        finish();
+    }
+
+    // Open Add Transaction screen
+    private void openAddTransaction() {
+        Intent intent = new Intent(activity_transaction_list.this, activity_addTransaction.class);
+        startActivityForResult(intent, 1);
+    }
+
+    // Filter transactions by date in descending order
+    private void filterTransactions() {
+        List<TransactionEntity> filteredList = transactionDAO.getTransactionsSortedByDate();
+        if (filteredList != null && !filteredList.isEmpty()) {
+            transactionList.clear();
+            transactionList.addAll(filteredList);
+            listViewAdapter.notifyDataSetChanged();
+            Toast.makeText(this, "Transactions sorted by date", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "No transactions available to sort", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Search transactions by name
+    private void searchTransactions() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-                if (s.isEmpty()) {
-                    loadEvents(); // Load all Events if search text is empty
-                } else {
-                    List<TransactionEntity> EventFromDb = AppDatabase.getDatabase(activity_transaction_list.this).TransactionDAO().searchTransaction(s);
-                    list.clear();
-                    list.addAll(EventFromDb);
-                    System.out.println("Search results: " + EventFromDb.size()); // Debug statement
-                }
-                listViewApdapter.notifyDataSetChanged();
+            public boolean onQueryTextSubmit(String query) {
+                searchAndUpdateList(query);
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
-                if (s.isEmpty()) {
-                    loadEvents(); // Reload all Events if search text is cleared
-                } else {
-                    List<TransactionEntity> EventFromDb = AppDatabase.getDatabase(activity_transaction_list.this).TransactionDAO().searchTransaction(s);
-                    list.clear();
-                    list.addAll(EventFromDb);
-                    System.out.println("Search results on change: " + EventFromDb.size()); // Debug statement
-                }
-                listViewApdapter.notifyDataSetChanged();
+            public boolean onQueryTextChange(String query) {
+                searchAndUpdateList(query);
                 return false;
             }
         });
     }
 
-    // chuyển active từ main sang addEvent
-    private void addEvent() {
-        Intent intent = new Intent(activity_transaction_list.this, activity_addTransaction.class);
-        startActivityForResult(intent, 1);
-        finish();
+    private void searchAndUpdateList(String query) {
+        if (query.isEmpty()) {
+            loadTransactions(); // Load all transactions if search query is empty
+        } else {
+            List<TransactionEntity> searchResults = transactionDAO.searchTransaction(query);
+            if (searchResults != null && !searchResults.isEmpty()) {
+                transactionList.clear();
+                transactionList.addAll(searchResults);
+                listViewAdapter.notifyDataSetChanged();
+                Toast.makeText(this, searchResults.size() + " transactions found", Toast.LENGTH_SHORT).show();
+            } else {
+                transactionList.clear();
+                listViewAdapter.notifyDataSetChanged();
+                Toast.makeText(this, "No transactions found", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
-    // load sản phẩm khi thay đổi đều gì đó
-    public void loadEvents() {
-        list.clear();
-        List<TransactionEntity> EventFromDb = AppDatabase.getDatabase(this).TransactionDAO().getAllTransactions();
-        list.addAll(EventFromDb);
-        listViewApdapter.notifyDataSetChanged(); // Update adapter
+    // Load all transactions from the database, sorted by date in descending order
+    private void loadTransactions() {
+        transactionList.clear();
+        List<TransactionEntity> transactionsFromDb = transactionDAO.getTransactionsSortedByDate();
+        if (transactionsFromDb != null && !transactionsFromDb.isEmpty()) {
+            transactionList.addAll(transactionsFromDb);
+            listViewAdapter.notifyDataSetChanged();
+        } else {
+            Toast.makeText(this, "No transactions available", Toast.LENGTH_SHORT).show();
+        }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            loadTransactions(); // Reload transactions after returning from AddTransaction
+        }
+    }
 }

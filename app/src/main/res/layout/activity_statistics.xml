@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lightOrange"
-    android:fitsSystemWindows="true">
+    android:background="@color/lightOrange">
     <!-- Toolbar chứa SearchView -->
     <!--    <androidx.appcompat.widget.Toolbar-->
     <!--        android:id="@+id/toolbar"-->
@@ -25,6 +24,26 @@
     <!--        android:layout_above="@id/bottom_navigation"-->
     <!--        android:visibility="gone"/>-->
 
+    <!-- Header Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="24dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/orange"> <!-- Nền cam cho header -->
+
+        <!-- Header Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Statistics"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center" />
+    </LinearLayout>
     <!-- Card view for displaying the -->
     <!-- Pie chart and details of pie chart -->
     <androidx.cardview.widget.CardView
@@ -34,7 +53,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="450dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="90dp"
         android:elevation="10dp"
         app:cardCornerRadius="10dp"
         android:layout_above="@id/bottom_navigation">
@@ -232,7 +251,7 @@
         android:orientation="vertical"
         android:padding="16dp"
         android:background="@color/white"
-        android:layout_marginTop="550dp"
+        android:layout_marginTop="530dp"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp">
 
@@ -307,7 +326,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Income and expense"
+                android:text="Account balance:"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 

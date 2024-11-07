@@ -293,7 +293,6 @@ public class activity_addTransaction extends AppCompatActivity {
     }
 
     private void addTransaction() {
-
         String date = addDate.getText().toString().trim();
         String note = addNote.getText().toString().trim();
         Double amount = 0.0;
@@ -304,24 +303,25 @@ public class activity_addTransaction extends AppCompatActivity {
             Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show();
             return;
         }
-//         lấy duex liệu từ bản user
+
+        // Get user details
         UserEntity user = userDAO.getUserById(1);
         if (user == null) {
             Toast.makeText(activity_addTransaction.this, "User not found", Toast.LENGTH_SHORT).show();
             return;
         }
+
         int userId = getSharedPreferences("user_prefs", MODE_PRIVATE)
                 .getInt("current_user_id", 0);
 
         if (checkValidation()) {
+            // Add new transaction to the database
             TransactionEntity transaction = new TransactionEntity(userId, date, categoryId, amount, note, address, isExpense);
             try {
                 transactionDAO.insertTransaction(transaction);
                 Toast.makeText(activity_addTransaction.this, "Transaction added successfully", Toast.LENGTH_SHORT).show();
-                // Kiểm tra trạng thái thông báo từ SharedPreferences
-                SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                boolean notificationsEnabled = prefs.getBoolean(KEY_NOTIFICATIONS_ENABLED, false);
 
+<<<<<<< HEAD
                 if (notificationsEnabled) {
                     notificationHelper.showTransactionNotification(userId, "Transactions", "Transaction added successfully");
                 } else {
@@ -333,6 +333,12 @@ public class activity_addTransaction extends AppCompatActivity {
                 intent.putExtra("amount", amount);
                 setResult(RESULT_OK, intent);
                 startActivity(intent1);
+=======
+                // Notify Home Activity about the update
+                Intent intent = new Intent(activity_addTransaction.this, activity_home.class);
+                intent.putExtra("transaction_added", true);
+                startActivity(intent);
+>>>>>>> f5cc3fc5cf164764c76f4f4c804d005ba303bc8b
                 finish();
             } catch (Exception e) {
                 e.printStackTrace();

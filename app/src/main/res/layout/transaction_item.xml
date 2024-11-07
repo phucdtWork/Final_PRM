@@ -14,12 +14,12 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/tv_name"
+                android:id="@+id/tv_note"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:paddingLeft="20dp"
-                android:text="Transaction Name" />
+                android:text="Note" />
 
             <TextView
                 android:id="@+id/tv_date"
@@ -30,23 +30,32 @@
                 android:text="Date" />
 
             <TextView
-                android:id="@+id/tv_location"
+                android:id="@+id/tv_is_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="57dp"
                 android:paddingLeft="20dp"
                 android:text="Expense"
+                android:textColor="#4CAF50" />
+
+            <TextView
+                android:id="@+id/tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="57dp"
+                android:paddingLeft="180dp"
+                android:text="0"
                 android:textColor="#F44336" />
 
             <ImageButton
                 android:id="@+id/editbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="320dp"
+                android:layout_marginStart="322dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
                 android:backgroundTint="@color/white"
-                app:srcCompat="@drawable/ic_edittrans" />
+                app:srcCompat="@drawable/ic_edit" />
 
             <ImageButton
                 android:id="@+id/deletebtn"

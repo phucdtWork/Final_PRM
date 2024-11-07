@@ -70,4 +70,5 @@ public class TransactionEntity {
 
     public boolean isExpense() { return isExpense; }
     public void setExpense(boolean isExpense) { this.isExpense = isExpense; }
+
 }

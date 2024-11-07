@@ -71,28 +71,37 @@ public class activity_statistics extends AppCompatActivity {
 //        listView = findViewById(R.id.listview);
 //        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, transactionList);
 //        listView.setAdapter(arrayAdapter);
+
+        // Lấy BottomNavigationView từ layout
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.navigation_statistics);
+        // Set sự kiện chọn item cho BottomNavigationView
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
 
-                if (id == R.id.navigation_home) {
-                    Intent home = new Intent(activity_statistics.this, activity_home.class);
-                    startActivity(home);
+                if (id == R.id.navigation_statistics) {
+                    // Chuyển về màn hình Home (nếu cần thiết)
+                    return true;
+                } else if (id == R.id.navigation_home) {
+                    // Chuyển sang màn hình Add Transaction
+                    Intent homeIntent = new Intent(activity_statistics.this, activity_home.class);
+                    startActivity(homeIntent);
                     return true;
                 } else if (id == R.id.navigation_add_transaction) {
-                    Intent addTransactionIntent = new Intent(activity_statistics.this, activity_addTransaction.class);
-                    startActivity(addTransactionIntent);
-                    return true;
-                } else if (id == R.id.navigation_statistics) {
+                    // Chuyển sang màn hình Statistics (tùy chỉnh activity khác nếu có)
+                    Intent statisticsIntent = new Intent(activity_statistics.this, activity_addTransaction.class);
+                    startActivity(statisticsIntent);
                     return true;
                 } else if (id == R.id.navigation_settings) {
+                    // Chuyển sang màn hình Settings (tùy chỉnh activity khác nếu có)
                     Intent settingsIntent = new Intent(activity_statistics.this, activity_settings.class);
                     startActivity(settingsIntent);
                     return true;
                 }
+
                 return false;
             }
         });

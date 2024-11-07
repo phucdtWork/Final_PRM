@@ -44,7 +44,7 @@
             android:layout_marginBottom="14dp"
             android:background="@drawable/edit_text_bg"
             android:hint="Enter your username"
-            android:padding="12dp" />
+            android:padding="10dp" />
 
 
 
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="14dp"
             android:background="@drawable/edit_text_bg"
-            android:padding="12dp" />
+            android:padding="10dp" />
 
         <!-- Nhập Answer -->
         <TextView
@@ -82,7 +82,7 @@
             android:layout_marginBottom="14dp"
             android:background="@drawable/edit_text_bg"
             android:hint="Enter your answer"
-            android:padding="12dp" />
+            android:padding="10dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -100,7 +100,7 @@
             android:background="@drawable/edit_text_bg"
             android:hint="Enter new password"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="10dp" />
 
         <!-- Nhập Confirm Password -->
         <TextView
@@ -119,7 +119,7 @@
             android:background="@drawable/edit_text_bg"
             android:hint="Confirm new password"
             android:inputType="textPassword"
-            android:padding="12dp" />
+            android:padding="10dp" />
     </LinearLayout>
 
     <!-- Nút Gửi Yêu Cầu -->
@@ -129,7 +129,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:backgroundTint="@color/black"
-        android:padding="12dp"
+        android:padding="10dp"
         android:text="Send Request"
         android:textColor="@color/white"
         android:textSize="18sp" />

@@ -60,7 +60,6 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginBottom="0dp"
-
                 />
 
             <!--Creating another linear layout -->

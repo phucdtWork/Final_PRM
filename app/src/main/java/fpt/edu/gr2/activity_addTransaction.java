@@ -330,6 +330,7 @@ public class activity_addTransaction extends AppCompatActivity {
                 if (notificationsEnabled) {
                     notificationHelper.showTransactionNotification(userId, "Transactions", "Transaction added successfully");
                 } else {
+                    notificationHelper.saveNotification(userId,"Transactions","Transaction added successfully");
                     Toast.makeText(this, "Notifications are disabled", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent1 = new Intent(activity_addTransaction.this, activity_home.class);

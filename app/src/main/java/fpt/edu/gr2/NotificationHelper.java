@@ -99,7 +99,7 @@ public class NotificationHelper {
     }
 
     // Phương thức lưu thông báo vào database
-    private void saveNotification(int userId, String title, String content) {
+    public void saveNotification(int userId, String title, String content) {
         String date = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
         NotificationEntity notification = new NotificationEntity(userId, title, content, date);
         new Thread(() -> notificationDao.insertNotification(notification)).start(); // Thực hiện trong một luồng phụ

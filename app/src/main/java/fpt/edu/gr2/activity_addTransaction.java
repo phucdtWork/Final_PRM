@@ -73,11 +73,6 @@ public class activity_addTransaction extends AppCompatActivity {
         handleSpinner();
         initViews();
         saveButton();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
-            }
-        }
         notificationHelper = new NotificationHelper(this);
         // Thiết lập BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

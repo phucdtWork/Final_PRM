@@ -17,6 +17,7 @@ public class activity_launch extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_launch);
         userId = getSharedPreferences("user_prefs", MODE_PRIVATE)
                 .getInt("current_user_id", 0);
